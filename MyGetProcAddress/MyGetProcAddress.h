@@ -70,7 +70,7 @@ typedef struct _API_SET_VALUE_ARRAY_V4
 } API_SET_VALUE_ARRAY_V4, *PAPI_SET_VALUE_ARRAY_V4;
 //////////////////////////////////////////////////////////////////////////////////////////
 
-PIMAGE_DATA_DIRECTORY GetDataDirectory(DWORD ImageBase, DWORD Index);
+PIMAGE_DATA_DIRECTORY GetDataDirectory(DWORD_PTR ImageBase, DWORD Index);
 PDWORD  GetApiSetMapHead();
 FARPROC GetExportByName(HMODULE hModule, char *ProcName);
 FARPROC GetExportByOrdinal(HMODULE hModule, WORD Ordinal);
