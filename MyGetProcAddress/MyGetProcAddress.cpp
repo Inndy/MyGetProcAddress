@@ -1,5 +1,8 @@
 #include "MyGetProcAddress.h"
 
+// NtCurrentTeb()->ProcessEnvironmentBlock
+#define NtCurrentPeb() (((PPEB*)NtCurrentTeb())[12])
+
 PIMAGE_DATA_DIRECTORY GetDataDirectory(DWORD ImageBase, DWORD Index)
 {
 	PIMAGE_DOS_HEADER DosHead;
@@ -9,16 +12,14 @@ PIMAGE_DATA_DIRECTORY GetDataDirectory(DWORD ImageBase, DWORD Index)
 	return (PIMAGE_DATA_DIRECTORY)(&PeHead->OptionalHeader.DataDirectory[Index]);
 }
 
-PDWORD  GetApiSetMapHead()
+PDWORD GetApiSetMapHead()
 {
-	DWORD *SetMapHead = 0;
-	__asm
-	{
-		mov eax, fs:[0x30]
-		mov eax, [eax + 0x38]
-		mov SetMapHead, eax
-	}
-	return SetMapHead;
+	PPEB peb = NtCurrentPeb();
+#if _WIN64 || __amd64__
+	return *(PDWORD*)((intptr_t)peb + 0x68);
+#else
+	return *(PDWORD*)((intptr_t)peb + 0x38);
+#endif
 }
 
 FARPROC GetExportByName(HMODULE hModule, char *ProcName)
