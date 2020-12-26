@@ -1,2 +1,3 @@
 # MyGetProcAddress
-自定义GetProcAddress
+
+`GetProcAddress` without using any API
